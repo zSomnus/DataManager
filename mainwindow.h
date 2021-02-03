@@ -24,10 +24,14 @@ private slots:
 
     void on_actionSaveAs_triggered();
 
+    void on_tableWidget_customContextMenuRequested(const QPoint &pos);
+
+    void on_actionDeleteTriggered();
 private:
     void setValueAt(int i, int j, const QString &value);
     QString getValueAt(int i, int j);
     Ui::MainWindow *ui;
     QTableWidget *table;
+    int selected_row;
 };
 #endif // MAINWINDOW_H

@@ -17,14 +17,12 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QTableWidget" name="tableWidget">
-      <property name="rowCount">
-       <number>5</number>
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
       </property>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
      </widget>
     </item>
    </layout>

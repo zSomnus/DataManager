@@ -112,3 +112,22 @@ QString MainWindow::getValueAt(int i, int j)
     }
     return table->item(i, j)->text();
 }
+
+void MainWindow::on_tableWidget_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu *treeWidgeMenu = new QMenu();
+    QAction *delete_row = treeWidgeMenu->addAction("Delete row");
+
+    QModelIndex index = table->indexAt(pos);    //找到tableview当前位置信息
+    selected_row = index.row();
+
+    connect(delete_row, SIGNAL(triggered()), this, SLOT(on_actionDeleteTriggered()));
+    treeWidgeMenu->exec(QCursor::pos());
+}
+
+void MainWindow::on_actionDeleteTriggered ()
+
+{
+    //通过sender()得到信号的发送对象，也就是哪个菜单项被单击
+    table->removeRow(selected_row);  //删除掉了表格信息
+}
