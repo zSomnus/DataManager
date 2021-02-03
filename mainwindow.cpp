@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     setCentralWidget(ui->tableView);
     setWindowTitle("Data Manager");
+
+    on_actionCreate_New_File_triggered();
 }
 
 MainWindow::~MainWindow()
@@ -29,6 +31,7 @@ void MainWindow::on_actionCreate_New_File_triggered()
     const int colCount = 5;
     mModel->setRowCount(rowCount);
     mModel->setColumnCount(colCount);
+    mModel->setHorizontalHeaderLabels({"Type", "Name", "Position", "Dialog", "Image"});
 }
 
 void MainWindow::on_actionOpen_triggered()
