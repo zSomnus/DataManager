@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     mModel = new QStandardItemModel(this);
     ui->tableView->setModel(mModel);
-    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     setCentralWidget(ui->tableView);
     setWindowTitle("Data Manager");
 
