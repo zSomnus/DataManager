@@ -22,10 +22,11 @@ private slots:
 
     void on_actionOpen_triggered();
 
-    void on_actionSave_triggered();
+    void on_actionSaveAs_triggered();
 
 private:
     void setValueAt(int i, int j, const QString &value);
+    QString getValueAt(int i, int j);
     Ui::MainWindow *ui;
     QStandardItemModel *mModel;
 };

@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     mModel = new QStandardItemModel(this);
     ui->tableView->setModel(mModel);
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     setCentralWidget(ui->tableView);
     setWindowTitle("Data Manager");
 }
@@ -63,9 +64,33 @@ void MainWindow::on_actionOpen_triggered()
     file.close();
 }
 
-void MainWindow::on_actionSave_triggered()
+void MainWindow::on_actionSaveAs_triggered()
 {
+    auto filename = QFileDialog::getSaveFileName(this, "Save", QDir::rootPath(), "TSV File (*.tsv)");
 
+    if(filename.isEmpty()) {
+        return;
+    }
+
+    QFile file(filename);
+
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QTextStream xout(&file);
+    const int rowCount = mModel->rowCount();
+    const int colCount = mModel->columnCount();
+
+    for(int i=0; i<rowCount; ++i) {
+        xout << getValueAt(i, 0);
+        for(int j=1; j<colCount; ++j) {
+            xout << "\t" << getValueAt(i, j);
+        }
+        xout << "\n";
+    }
+    file.flush();
+    file.close();
 }
 
 void MainWindow::setValueAt(int i, int j, const QString &value)
@@ -75,4 +100,12 @@ void MainWindow::setValueAt(int i, int j, const QString &value)
     } else {
         mModel->item(i, j)->setText(value);
     }
+}
+
+QString MainWindow::getValueAt(int i, int j)
+{
+    if(!mModel->item(i, j)) {
+        return "";
+    }
+    return mModel->item(i, j)->text();
 }
