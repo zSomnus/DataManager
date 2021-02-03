@@ -7,7 +7,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class QStandardItemModel;
+class QTableWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -28,6 +28,6 @@ private:
     void setValueAt(int i, int j, const QString &value);
     QString getValueAt(int i, int j);
     Ui::MainWindow *ui;
-    QStandardItemModel *mModel;
+    QTableWidget *table;
 };
 #endif // MAINWINDOW_H

@@ -16,7 +16,16 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QTableView" name="tableView"/>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="rowCount">
+       <number>5</number>
+      </property>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+     </widget>
     </item>
    </layout>
   </widget>

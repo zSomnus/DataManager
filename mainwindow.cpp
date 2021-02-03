@@ -10,9 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    mModel = new QStandardItemModel(this);
-    ui->tableView->setModel(mModel);
-    setCentralWidget(ui->tableView);
+    table = ui->tableWidget;
     setWindowTitle("Data Manager");
 
     on_actionCreate_New_File_triggered();
@@ -26,15 +24,18 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionCreate_New_File_triggered()
 {
-    const int rowCount = 5;
+    table->clear();
+    const int rowCount = 2;
     const int colCount = 5;
-    mModel->setRowCount(rowCount);
-    mModel->setColumnCount(colCount);
-    mModel->setHorizontalHeaderLabels({"Type", "Name", "Position", "Dialog", "Image"});
+    table->setRowCount(rowCount);
+    table->setColumnCount(colCount);
+    table->setHorizontalHeaderLabels({"Type", "Name", "Position", "Dialog", "Image"});
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
+    table->clear();
+
     auto filename = QFileDialog::getOpenFileName(this, "Open File", QDir::rootPath(), "TSV File (*.tsv)");
 
     if(filename.isEmpty()) {
@@ -50,11 +51,11 @@ void MainWindow::on_actionOpen_triggered()
     QTextStream xin(&file);
     int i = 0;
     while(!xin.atEnd()) {
-        mModel->setRowCount(i);
+        table->setRowCount(i + 1);
         auto line = xin.readLine();
         auto values = line.split("\t");
         const int colCount = values.size();
-        mModel->setColumnCount(colCount);
+        table->setColumnCount(colCount);
 
         for(int j=0; j < colCount; ++j) {
             setValueAt(i, j, values.at(j));
@@ -81,8 +82,8 @@ void MainWindow::on_actionSaveAs_triggered()
     }
 
     QTextStream xout(&file);
-    const int rowCount = mModel->rowCount();
-    const int colCount = mModel->columnCount();
+    const int rowCount = table->rowCount();
+    const int colCount = table->columnCount();
 
     for(int i=0; i<rowCount; ++i) {
         xout << getValueAt(i, 0);
@@ -97,17 +98,17 @@ void MainWindow::on_actionSaveAs_triggered()
 
 void MainWindow::setValueAt(int i, int j, const QString &value)
 {
-    if(!mModel->item(i, j)) {
-        mModel->setItem(i, j, new QStandardItem(value));
+    if(!table->item(i, j)) {
+        table->setItem(i, j, new QTableWidgetItem(value));
     } else {
-        mModel->item(i, j)->setText(value);
+        table->item(i, j)->setText(value);
     }
 }
 
 QString MainWindow::getValueAt(int i, int j)
 {
-    if(!mModel->item(i, j)) {
+    if(!table->item(i, j)) {
         return "";
     }
-    return mModel->item(i, j)->text();
+    return table->item(i, j)->text();
 }
