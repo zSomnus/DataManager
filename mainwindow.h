@@ -9,6 +9,7 @@ QT_END_NAMESPACE
 
 class QTableWidget;
 class QComboBox;
+class TextEditorWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -30,15 +31,27 @@ private slots:
     void on_actionSave_triggered();
 
     // Right click menu
+    void on_actionEditLongText();
+
+    void on_actionInsertAboveTriggered();
+
+    void on_actionInsertBelowTriggered();
+
     void on_actionDeleteTriggered();
+
+    void on_closeTextEditor();
 
 private:
     void setValueAt(int i, int j, const QString &value);
     QString getValueAt(int i, int j);
+
+    int selected_row;
+    int selected_column;
+
     Ui::MainWindow *ui;
     QTableWidget *table;
-    int selected_row;
     QComboBox *position_box;
+    TextEditorWidget *text_edit_widget;
 
     int Flag_IsOpen = 0;       //标记：判断是否打开或创建了一个文件
     int Flag_IsNew = 0;        //标记：如果新建了文件就为1，初始值为0
