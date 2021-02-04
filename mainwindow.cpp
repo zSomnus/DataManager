@@ -4,6 +4,8 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QFile>
+#include <QComboBox>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     table = ui->tableWidget;
     setWindowTitle("Data Manager");
+
+    position_box = new QComboBox();
 
     on_actionCreate_New_File_triggered();
 }
@@ -30,6 +34,9 @@ void MainWindow::on_actionCreate_New_File_triggered()
     table->setRowCount(rowCount);
     table->setColumnCount(colCount);
     table->setHorizontalHeaderLabels({"Type", "Name", "Position", "Dialog", "Image"});
+
+    Flag_IsNew = 1;
+    Flag_IsOpen = 1;
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -65,6 +72,9 @@ void MainWindow::on_actionOpen_triggered()
     }
 
     file.close();
+    Flag_IsOpen = 1;
+    Flag_IsNew = 0;
+    Last_FileName = filename;
 }
 
 void MainWindow::on_actionSaveAs_triggered()
@@ -94,6 +104,49 @@ void MainWindow::on_actionSaveAs_triggered()
     }
     file.flush();
     file.close();
+
+    Flag_IsNew = 0;
+    Last_FileName = filename;
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    if(Flag_IsNew) {
+        on_actionSaveAs_triggered();
+    } else {
+        QFile file(Last_FileName);
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this,tr("Warning"),tr("Fail to open the file"));
+            return;
+        }
+        else
+        {
+            if(Last_FileName.isEmpty()) {
+                return;
+            }
+
+            QFile file(Last_FileName);
+
+            if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                return;
+            }
+
+            QTextStream xout(&file);
+            const int rowCount = table->rowCount();
+            const int colCount = table->columnCount();
+
+            for(int i=0; i<rowCount; ++i) {
+                xout << getValueAt(i, 0);
+                for(int j=1; j<colCount; ++j) {
+                    xout << "\t" << getValueAt(i, j);
+                }
+                xout << "\n";
+            }
+            file.flush();
+            file.close();
+        }
+    }
 }
 
 void MainWindow::setValueAt(int i, int j, const QString &value)
@@ -125,9 +178,8 @@ void MainWindow::on_tableWidget_customContextMenuRequested(const QPoint &pos)
     treeWidgeMenu->exec(QCursor::pos());
 }
 
-void MainWindow::on_actionDeleteTriggered ()
-
-{
+void MainWindow::on_actionDeleteTriggered() {
     //通过sender()得到信号的发送对象，也就是哪个菜单项被单击
     table->removeRow(selected_row);  //删除掉了表格信息
 }
+
