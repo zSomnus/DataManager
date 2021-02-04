@@ -33,6 +33,10 @@ private slots:
     // Right click menu
     void on_actionEditLongText();
 
+    void on_actionInsertImage();
+
+
+    // Table action
     void on_actionInsertAboveTriggered();
 
     void on_actionInsertBelowTriggered();

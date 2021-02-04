@@ -173,6 +173,10 @@ void MainWindow::on_tableWidget_customContextMenuRequested(const QPoint &pos)
 
     // Actions
     QAction *edit_long_text = treeWidgeMenu->addAction("Long text...");
+    QAction *insert_image = treeWidgeMenu->addAction("Image...");
+
+    treeWidgeMenu->addSeparator();
+
     QAction *insert_row_above = treeWidgeMenu->addAction("Insert row above");
     QAction *insert_row_below = treeWidgeMenu->addAction("Insert row below");
     QAction *delete_row = treeWidgeMenu->addAction("Delete row");
@@ -184,6 +188,8 @@ void MainWindow::on_tableWidget_customContextMenuRequested(const QPoint &pos)
 
     // Connections
     connect(edit_long_text, SIGNAL(triggered()), this, SLOT(on_actionEditLongText()));
+    connect(insert_image, SIGNAL(triggered()), this, SLOT(on_actionInsertImage()));
+
     connect(insert_row_above, SIGNAL(triggered()), this, SLOT(on_actionInsertAboveTriggered()));
     connect(insert_row_below, SIGNAL(triggered()), this, SLOT(on_actionInsertBelowTriggered()));
     connect(delete_row, SIGNAL(triggered()), this, SLOT(on_actionDeleteTriggered()));
@@ -198,6 +204,20 @@ void MainWindow::on_actionEditLongText() {
     text_edit_widget->setLongText(text_edit_widget->long_text);
     text_edit_widget->show();
     connect(text_edit_widget,SIGNAL(ExitWin()),this,SLOT(on_closeTextEditor()));
+}
+
+void MainWindow::on_actionInsertImage()
+{
+    QString path = "";
+
+    if(table->itemAt(selected_row, selected_column)) {
+        path = getValueAt(selected_row, selected_column);
+    } else {
+        path = QDir::rootPath();
+    }
+
+    auto filename = QFileDialog::getOpenFileName(this, "Select Image", path, "image/jpeg (*.jpeg *.jpg *.jpe);;image/png (*.png)");
+    table->setItem(selected_row, selected_column, new QTableWidgetItem(QIcon(filename), filename));
 }
 
 void MainWindow::on_closeTextEditor()
