@@ -44,7 +44,7 @@ void MainWindow::on_actionOpen_triggered()
 {
     table->clear();
 
-    auto filename = QFileDialog::getOpenFileName(this, "Open File", QDir::rootPath(), "TSV File (*.tsv)");
+    auto filename = QFileDialog::getOpenFileName(this, "Open File", QDir::rootPath(), "CSV File (*.csv)");
 
     if(filename.isEmpty()) {
         return;
@@ -61,7 +61,7 @@ void MainWindow::on_actionOpen_triggered()
     while(!xin.atEnd()) {
         table->setRowCount(i + 1);
         auto line = xin.readLine();
-        auto values = line.split("\t");
+        auto values = line.split(",");
         const int colCount = values.size();
         table->setColumnCount(colCount);
 
@@ -80,7 +80,7 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionSaveAs_triggered()
 {
-    auto filename = QFileDialog::getSaveFileName(this, "Save", QDir::rootPath(), "TSV File (*.tsv)");
+    auto filename = QFileDialog::getSaveFileName(this, "Save", QDir::rootPath(), "CSV File (*.csv)");
 
     if(filename.isEmpty()) {
         return;
@@ -99,7 +99,7 @@ void MainWindow::on_actionSaveAs_triggered()
     for(int i=0; i<rowCount; ++i) {
         xout << getValueAt(i, 0);
         for(int j=1; j<colCount; ++j) {
-            xout << "\t" << getValueAt(i, j);
+            xout << "," << getValueAt(i, j);
         }
         xout << "\n";
     }
@@ -140,7 +140,7 @@ void MainWindow::on_actionSave_triggered()
             for(int i=0; i<rowCount; ++i) {
                 xout << getValueAt(i, 0);
                 for(int j=1; j<colCount; ++j) {
-                    xout << "\t" << getValueAt(i, j);
+                    xout << "," << getValueAt(i, j);
                 }
                 xout << "\n";
             }
