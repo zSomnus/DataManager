@@ -90,13 +90,18 @@ void MainWindow::on_actionOpen_triggered()
 
         const int colCount = values.size();
 
-        table->setColumnCount(colCount);
+        if(colCount > maxCol) {
+            maxCol = colCount;
+        }
+
+        table->setColumnCount(maxCol);
 
         for(int j=0; j < colCount; ++j) {
             current = values.at(j);
 
             if(col + 1 > table->columnCount()) {
                 table->setColumnCount(col + 1);
+                maxCol = col + 1;
             }
 
             if(current.length() > 0 && current[0] == '"' && !isLongText) {
