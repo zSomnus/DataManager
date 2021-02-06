@@ -112,14 +112,27 @@ void MainWindow::on_actionOpen_triggered()
                 temp.append(current);
                 if(current[current.length() - 1] == '"') {
                     // Set value here
-                    setValueAt(row, col++, temp);
+                    setValueAt(row, col, temp);
+                    table->item(row, col)->setFlags((Qt::ItemFlags)0);
                     isLongText = false;
                     temp.clear();
+                    ++col;
                 }
             } else {
                 // Set value here
-                setValueAt(row, col++, current);
-//                ++col;
+                // Check if this is a image (.png, .jepg, .jpg, .jpe)
+                if(current.contains(".png") ||
+                        current.contains(".jpg") ||
+                        current.contains(".jepg") ||
+                        current.contains(".jpe")) {
+                    QFileInfo fileInfo(current);
+                    if(fileInfo.isFile()) {
+                        setValueWithIconAt(row, col, current);
+                    }
+                } else {
+                    setValueAt(row, col, current);
+                }
+                ++col;
             }
 //            setValueAt(i, j, values.at(j));
             current.clear();
@@ -223,6 +236,14 @@ void MainWindow::setValueAt(int i, int j, const QString &value)
     }
 }
 
+void MainWindow::setValueWithIconAt(int i, int j, const QString &value)
+{
+    if(table->item(i, j)) {
+        table->removeCellWidget(i, j);
+    }
+    table->setItem(i, j, new QTableWidgetItem(QIcon(value), value));
+}
+
 QString MainWindow::getValueAt(int i, int j)
 {
     if(!table->item(i, j)) {
@@ -287,6 +308,7 @@ void MainWindow::on_actionInsertImage()
 void MainWindow::on_closeTextEditor()
 {
     table->setItem(selected_row, selected_column, new QTableWidgetItem(text_edit_widget->long_text));
+    table->item(selected_row, selected_column)->setFlags((Qt::ItemFlags)0);
 }
 
 void MainWindow::on_actionInsertAboveTriggered()

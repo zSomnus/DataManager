@@ -47,6 +47,7 @@ private slots:
 
 private:
     void setValueAt(int i, int j, const QString &value);
+    void setValueWithIconAt(int i, int j, const QString &value);
     QString getValueAt(int i, int j);
 
     int selected_row;
