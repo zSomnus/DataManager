@@ -68,9 +68,10 @@ void MainWindow::on_actionOpen_triggered()
     int col = 0;
     int row = 0;
 
+    int maxCol = 0;
+
 
     while(!xin.atEnd()) {
-        table->setRowCount(row + 1);
         auto line = xin.readLine();
 
         if(line.isEmpty()) {
@@ -84,7 +85,9 @@ void MainWindow::on_actionOpen_triggered()
             continue;
         }
 
+        table->setRowCount(row + 1);
         auto values = line.split(",");
+
         const int colCount = values.size();
 
         table->setColumnCount(colCount);
@@ -92,7 +95,11 @@ void MainWindow::on_actionOpen_triggered()
         for(int j=0; j < colCount; ++j) {
             current = values.at(j);
 
-            if(current.length() > 0 && current[0] == '"') {
+            if(col + 1 > table->columnCount()) {
+                table->setColumnCount(col + 1);
+            }
+
+            if(current.length() > 0 && current[0] == '"' && !isLongText) {
                 isLongText = true;
             }
 
@@ -100,16 +107,14 @@ void MainWindow::on_actionOpen_triggered()
                 temp.append(current);
                 if(current[current.length() - 1] == '"') {
                     // Set value here
-                    setValueAt(row, col, temp);
+                    setValueAt(row, col++, temp);
                     isLongText = false;
                     temp.clear();
-                    ++col;
-
                 }
             } else {
                 // Set value here
-                setValueAt(row, col, current);
-                ++col;
+                setValueAt(row, col++, current);
+//                ++col;
             }
 //            setValueAt(i, j, values.at(j));
             current.clear();
