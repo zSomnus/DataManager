@@ -17,6 +17,7 @@ TextEditorWidget::~TextEditorWidget()
 void TextEditorWidget::closeEvent(QCloseEvent *)
 {
     long_text = ui->textEdit->toPlainText();
+    long_text.replace("\"", "\"\"");
     long_text.prepend('"');
     long_text.append('"');
 
@@ -30,6 +31,7 @@ void TextEditorWidget::setLongText(QString &value)
         if(value[0] == '"') {
             value.remove(0, 1);
             value.chop(1);
+            value.replace("\"\"", "\"");
         }
     }
     ui->textEdit->setText(value);
