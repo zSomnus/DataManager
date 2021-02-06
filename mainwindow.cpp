@@ -42,13 +42,16 @@ void MainWindow::on_actionCreate_New_File_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    table->clear();
-
     auto filename = QFileDialog::getOpenFileName(this, "Open File", QDir::rootPath(), "CSV File (*.csv)");
 
     if(filename.isEmpty()) {
         return;
     }
+
+    table->clear();
+
+    table->setRowCount(0);
+    table->setColumnCount(0);
 
     QFile file(filename);
 
@@ -58,15 +61,66 @@ void MainWindow::on_actionOpen_triggered()
 
     QTextStream xin(&file);
     int i = 0;
+    bool isLongText = false;
+    QString temp = "";
+    QString current;
+
+    int col = 0;
+    int row = 0;
+
+
     while(!xin.atEnd()) {
-        table->setRowCount(i + 1);
+        table->setRowCount(row + 1);
         auto line = xin.readLine();
+
+        if(line.isEmpty()) {
+            if(isLongText) {
+                temp.append('\n');
+            } else {
+                ++row;
+            }
+
+            ++i;
+            continue;
+        }
+
         auto values = line.split(",");
         const int colCount = values.size();
+
         table->setColumnCount(colCount);
 
         for(int j=0; j < colCount; ++j) {
-            setValueAt(i, j, values.at(j));
+            current = values.at(j);
+
+            if(current.length() > 0 && current[0] == '"') {
+                isLongText = true;
+            }
+
+            if(isLongText) {
+                temp.append(current);
+                if(current[current.length() - 1] == '"') {
+                    // Set value here
+                    setValueAt(row, col, temp);
+                    isLongText = false;
+                    temp.clear();
+                    ++col;
+
+                }
+            } else {
+                // Set value here
+                setValueAt(row, col, current);
+                ++col;
+            }
+//            setValueAt(i, j, values.at(j));
+            current.clear();
+        }
+
+        if(!isLongText) {
+            ++row;
+//            table->setRowCount(row + 1);
+            col = 0;
+        } else {
+            temp.append('\n');
         }
 
         ++i;
