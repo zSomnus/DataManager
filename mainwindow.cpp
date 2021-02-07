@@ -109,6 +109,9 @@ void MainWindow::on_actionOpen_triggered()
             }
 
             if(isLongText) {
+                if(!temp.isEmpty() && temp.right(1) != '\n') {
+                    temp.append(',');
+                }
                 temp.append(current);
                 if(current[current.length() - 1] == '"') {
                     // Set value here
