@@ -45,6 +45,8 @@ private slots:
 
     void on_closeTextEditor();
 
+    void on_tableWidget_currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn);
+
 private:
     void setValueAt(int i, int j, const QString &value);
     void setValueWithIconAt(int i, int j, const QString &value);

@@ -15,10 +15,20 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     table = ui->tableWidget;
-    setCentralWidget(table);
+//    setCentralWidget(table);
     setWindowTitle("Data Manager");
     position_box = new QComboBox();
     on_actionCreate_New_File_triggered();
+
+//    if(table->currentItem()->text().contains(".png") ||
+//            table->currentItem()->text().contains(".jpg") ||
+//            table->currentItem()->text().contains(".jepg") ||
+//            table->currentItem()->text().contains(".jpe")) {
+//        QFileInfo fileInfo(table->currentItem()->text());
+//        if(fileInfo.isFile()) {
+//            qDebug() << "Has Image";
+//        }
+//    }
 }
 
 MainWindow::~MainWindow()
@@ -306,6 +316,7 @@ void MainWindow::on_actionInsertImage()
 
     auto filename = QFileDialog::getOpenFileName(this, "Select Image", path, "image/jpeg (*.jpeg *.jpg *.jpe);;image/png (*.png)");
     table->setItem(selected_row, selected_column, new QTableWidgetItem(QIcon(filename), filename));
+    ui->imagePreviewLabel->setPixmap(QPixmap(filename).scaled(ui->imagePreviewLabel->size(), Qt::KeepAspectRatio));
 }
 
 void MainWindow::on_closeTextEditor()
@@ -329,3 +340,18 @@ void MainWindow::on_actionDeleteTriggered() {
     table->removeRow(selected_row);  //删除掉了表格信息
 }
 
+void MainWindow::on_tableWidget_currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn)
+{
+    QString current_string = getValueAt(currentRow, currentColumn);
+    if(current_string.contains(".png") ||
+            current_string.contains(".jpg") ||
+            current_string.contains(".jepg") ||
+            current_string.contains(".jpe")) {
+        QFileInfo fileInfo(current_string);
+        if(fileInfo.isFile()) {
+            ui->imagePreviewLabel->setPixmap(QPixmap(current_string).scaled(ui->imagePreviewLabel->size(), Qt::KeepAspectRatio));
+        }
+    } else {
+        ui->imagePreviewLabel->setText("No image...");
+    }
+}

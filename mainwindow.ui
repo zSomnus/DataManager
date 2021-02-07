@@ -17,11 +17,17 @@
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>9</y>
-      <width>711</width>
-      <height>541</height>
+      <x>-1</x>
+      <y>-1</y>
+      <width>681</width>
+      <height>551</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>509</width>
+      <height>268</height>
+     </size>
     </property>
     <property name="contextMenuPolicy">
      <enum>Qt::CustomContextMenu</enum>
@@ -33,24 +39,17 @@
    <widget class="QLabel" name="imagePreviewLabel">
     <property name="geometry">
      <rect>
-      <x>731</x>
-      <y>9</y>
-      <width>301</width>
-      <height>281</height>
+      <x>690</x>
+      <y>10</y>
+      <width>341</width>
+      <height>541</height>
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>None</string>
     </property>
-   </widget>
-   <widget class="QTextEdit" name="textEdit">
-    <property name="geometry">
-     <rect>
-      <x>730</x>
-      <y>300</y>
-      <width>301</width>
-      <height>251</height>
-     </rect>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
