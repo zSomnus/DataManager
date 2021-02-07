@@ -128,7 +128,7 @@ void MainWindow::on_actionOpen_triggered()
                     // Set value here
                     qDebug() << current;
                     setValueAt(row, col, temp);
-                    table->item(row, col)->setFlags((Qt::ItemFlags)0);
+                    table->item(row, col)->setFlags((Qt::ItemFlags)16);
                     isLongText = false;
                     temp.clear();
                     ++col;
@@ -277,6 +277,10 @@ void MainWindow::on_tableWidget_customContextMenuRequested(const QPoint &pos)
 
     treeWidgeMenu->addSeparator();
 
+    QAction *clear_cell = treeWidgeMenu->addAction("Clear current cell");
+
+    treeWidgeMenu->addSeparator();
+
     QAction *insert_row_above = treeWidgeMenu->addAction("Insert row above");
     QAction *insert_row_below = treeWidgeMenu->addAction("Insert row below");
     QAction *delete_row = treeWidgeMenu->addAction("Delete row");
@@ -290,6 +294,7 @@ void MainWindow::on_tableWidget_customContextMenuRequested(const QPoint &pos)
     connect(edit_long_text, SIGNAL(triggered()), this, SLOT(on_actionEditLongText()));
     connect(insert_image, SIGNAL(triggered()), this, SLOT(on_actionInsertImage()));
 
+    connect(clear_cell, SIGNAL(triggered()), this, SLOT(on_actionClearCell()));
     connect(insert_row_above, SIGNAL(triggered()), this, SLOT(on_actionInsertAboveTriggered()));
     connect(insert_row_below, SIGNAL(triggered()), this, SLOT(on_actionInsertBelowTriggered()));
     connect(delete_row, SIGNAL(triggered()), this, SLOT(on_actionDeleteTriggered()));
@@ -321,10 +326,17 @@ void MainWindow::on_actionInsertImage()
     ui->imagePreviewLabel->setPixmap(QPixmap(filename).scaled(ui->imagePreviewLabel->size(), Qt::KeepAspectRatio));
 }
 
+void MainWindow::on_actionClearCell()
+{
+//    table->item(selected_row, selected_column)->setFlags((Qt::ItemFlags));
+    delete  table->item(selected_row, selected_column);
+    setValueAt(selected_row, selected_column, "");
+}
+
 void MainWindow::on_closeTextEditor()
 {
     table->setItem(selected_row, selected_column, new QTableWidgetItem(text_edit_widget->long_text));
-    table->item(selected_row, selected_column)->setFlags((Qt::ItemFlags)0);
+    table->item(selected_row, selected_column)->setFlags((Qt::ItemFlags)16);
 }
 
 void MainWindow::on_actionInsertAboveTriggered()

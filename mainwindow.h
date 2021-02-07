@@ -37,6 +37,8 @@ private slots:
 
 
     // Table action
+    void on_actionClearCell();
+
     void on_actionInsertAboveTriggered();
 
     void on_actionInsertBelowTriggered();
