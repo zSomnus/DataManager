@@ -114,8 +114,9 @@ void MainWindow::on_actionOpen_triggered()
                 maxCol = col + 1;
             }
 
-            if(current.length() > 0 && current[0] == '"' && !isLongText) {
+            if(current.length() > 0 && current[0] == '"' && current.left(2) != "\"\"" && !isLongText) {
                 isLongText = true;
+                qDebug() << current;
             }
 
             if(isLongText) {
@@ -123,8 +124,9 @@ void MainWindow::on_actionOpen_triggered()
                     temp.append(',');
                 }
                 temp.append(current);
-                if(current[current.length() - 1] == '"') {
+                if(current.length() > 1 && current.right(2) != "\"\"" && current.right(1) == '\"') {
                     // Set value here
+                    qDebug() << current;
                     setValueAt(row, col, temp);
                     table->item(row, col)->setFlags((Qt::ItemFlags)0);
                     isLongText = false;
