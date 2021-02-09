@@ -15,20 +15,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     table = ui->tableWidget;
-//    setCentralWidget(table);
     setWindowTitle("Data Manager");
     position_box = new QComboBox();
     on_actionCreate_New_File_triggered();
-
-//    if(table->currentItem()->text().contains(".png") ||
-//            table->currentItem()->text().contains(".jpg") ||
-//            table->currentItem()->text().contains(".jepg") ||
-//            table->currentItem()->text().contains(".jpe")) {
-//        QFileInfo fileInfo(table->currentItem()->text());
-//        if(fileInfo.isFile()) {
-//            qDebug() << "Has Image";
-//        }
-//    }
+    table->setShowGrid(true);
 }
 
 MainWindow::~MainWindow()
@@ -149,13 +139,11 @@ void MainWindow::on_actionOpen_triggered()
                 }
                 ++col;
             }
-//            setValueAt(i, j, values.at(j));
             current.clear();
         }
 
         if(!isLongText) {
             ++row;
-//            table->setRowCount(row + 1);
             col = 0;
         } else {
             temp.append('\n');
@@ -286,7 +274,7 @@ void MainWindow::on_tableWidget_customContextMenuRequested(const QPoint &pos)
     QAction *delete_row = treeWidgeMenu->addAction("Delete row");
 
 
-    QModelIndex index = table->indexAt(pos);    //找到tableview当前位置信息
+    QModelIndex index = table->indexAt(pos);    //Find current position of tableview
     selected_row = index.row();
     selected_column = index.column();
 
@@ -328,7 +316,6 @@ void MainWindow::on_actionInsertImage()
 
 void MainWindow::on_actionClearCell()
 {
-//    table->item(selected_row, selected_column)->setFlags((Qt::ItemFlags));
     delete  table->item(selected_row, selected_column);
     setValueAt(selected_row, selected_column, "");
 }
@@ -350,8 +337,7 @@ void MainWindow::on_actionInsertBelowTriggered()
 }
 
 void MainWindow::on_actionDeleteTriggered() {
-    //通过sender()得到信号的发送对象，也就是哪个菜单项被单击
-    table->removeRow(selected_row);  //删除掉了表格信息
+    table->removeRow(selected_row);  // Remove selected row
 }
 
 void MainWindow::on_tableWidget_currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn)

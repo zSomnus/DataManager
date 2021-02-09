@@ -62,9 +62,9 @@ private:
     QComboBox *position_box;
     TextEditorWidget *text_edit_widget;
 
-    int Flag_IsOpen = 0;       //标记：判断是否打开或创建了一个文件
-    int Flag_IsNew = 0;        //标记：如果新建了文件就为1，初始值为0
-    QString Last_FileName;     //最后一次保存的文件的名字
-    QString Last_FileContent;  //最后一次保存文件的内容
+    int Flag_IsOpen = 0;       // Flag: Is the file opend or not
+    int Flag_IsNew = 0;        // Flag: if it's new file, set the value to 1, initial number is 0
+    QString Last_FileName;     // File name during last save
+    QString Last_FileContent;  // File content during last save
 };
 #endif // MAINWINDOW_H
